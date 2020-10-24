@@ -1,0 +1,7 @@
+{
+  "name": "devchallenges-Todo-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
