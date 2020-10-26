@@ -22,9 +22,9 @@ const Completed = () => {
     { title: "title1", isCompleted: true },
     { title: "title2", isCompleted: false },
     { title: "title3", isCompleted: true },
-    { title: "title4", isCompleted: true },
+    { title: "title4", isCompleted: false },
     { title: "title5", isCompleted: true },
-    { title: "title6", isCompleted: true },
+    { title: "title6", isCompleted: false },
   ]);
   // const [tasks, setTasks] = useState([])
   // useEffect(()=> {
@@ -34,7 +34,6 @@ const Completed = () => {
   // },[])
 
   const toggleIsCompleted = (i) => {
-    console.log(i);
     const tmp = JSON.parse(JSON.stringify(tasks));
     tmp[i].isCompleted = !tmp[i].isCompleted;
     setTasks(tmp);
@@ -45,10 +44,15 @@ const Completed = () => {
   };
 
   const deleteTask = (i) => {
-    alert("a");
     const tmp = JSON.parse(JSON.stringify(tasks));
     tmp.splice(i, 1);
     setTasks(tmp);
+  };
+
+  const deleteAllTask = () => {
+    const tmp = JSON.parse(JSON.stringify(tasks));
+    const afterDelete = tmp.filter((task) => !task.isCompleted);
+    setTasks(afterDelete);
   };
 
   return (
@@ -88,21 +92,19 @@ const Completed = () => {
             }
           })}
         </IonList>
-        {/* {tasks
-          .filter((task) => task.isCompleted)
-          .map(({ title, isCompleted }, i) => (
-            <IonItem key={i}>
-              <IonLabel>{title}</IonLabel>
-              <IonCheckbox
-                slot="start"
-                value={title}
-                checked={isCompleted}
-                onIonChange={() => {
-                  toggleIsCompleted(i);
-                }}
-              />
-            </IonItem>
-          ))} */}
+        <IonButton
+          type="button"
+          className="ion-float-end"
+          color="danger"
+          onClick={() => deleteAllTask()}
+        >
+          <IonIcon
+            icon={trashOutline}
+            size="small"
+            style={{ marginRight: "8px" }}
+          />
+          delete all
+        </IonButton>
       </IonContent>
     </IonPage>
   );
