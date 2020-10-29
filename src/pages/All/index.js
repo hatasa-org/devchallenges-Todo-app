@@ -56,7 +56,13 @@ const All = () => {
           {tasks.map(({ title, isCompleted }, i) => {
             return (
               <IonItem key={i} lines="full">
-                <IonLabel>{title}</IonLabel>
+                {isCompleted ? (
+                  <IonLabel>{title}</IonLabel>
+                ) : (
+                  <IonLabel style={{ textDecorationLine: "line-through" }}>
+                    {title}
+                  </IonLabel>
+                )}
                 <IonCheckbox
                   slot="start"
                   value={title}
