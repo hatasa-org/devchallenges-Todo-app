@@ -57,11 +57,11 @@ const All = () => {
             return (
               <IonItem key={i} lines="full">
                 {isCompleted ? (
-                  <IonLabel>{title}</IonLabel>
-                ) : (
                   <IonLabel style={{ textDecorationLine: "line-through" }}>
                     {title}
                   </IonLabel>
+                ) : (
+                  <IonLabel>{title}</IonLabel>
                 )}
                 <IonCheckbox
                   slot="start"
@@ -88,19 +88,6 @@ const All = () => {
             );
           })}
         </IonList>
-        <IonButton
-          type="button"
-          className="ion-float-end"
-          color="danger"
-          onClick={() => deleteAllTask()}
-        >
-          <IonIcon
-            icon={trashOutline}
-            size="small"
-            style={{ marginRight: "8px" }}
-          />
-          delete all
-        </IonButton>
       </IonContent>
     </IonPage>
   );
