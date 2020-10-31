@@ -6,13 +6,15 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonIcon,
   IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonInput,
 } from "@ionic/react";
-import { trashOutline } from "ionicons/icons";
 
 const All = () => {
-  const [tasks, setTasks] = useState([
+  var [tasks, setTasks] = useState([
     { title: "title1", isCompleted: true },
     { title: "title2", isCompleted: false },
     { title: "title3", isCompleted: true },
@@ -20,12 +22,6 @@ const All = () => {
     { title: "title5", isCompleted: true },
     { title: "title6", isCompleted: false },
   ]);
-  // const [tasks, setTasks] = useState([])
-  // useEffect(()=> {
-  //   if("tasks" in localStorage){
-  //     setTasks(JSON.parse(localStorage.getItem("tasks")))
-  //   }
-  // },[])
 
   const toggleIsCompleted = (i) => {
     const tmp = JSON.parse(JSON.stringify(tasks));
@@ -37,21 +33,34 @@ const All = () => {
     // });
   };
 
-  const deleteTask = (i) => {
-    const tmp = JSON.parse(JSON.stringify(tasks));
-    tmp.splice(i, 1);
-    setTasks(tmp);
-  };
-
-  const deleteAllTask = () => {
-    const tmp = JSON.parse(JSON.stringify(tasks));
-    const afterDelete = tmp.filter((task) => !task.isCompleted);
-    setTasks(afterDelete);
-  };
-
+  const newTask = { title: "", isCompleted: false };
   return (
     <IonPage>
       <IonContent>
+        <IonGrid>
+          <IonRow>
+            <IonCol>
+              <IonInput
+                onIonChange={(e) => {
+                  newTask.title = e.detail.value;
+                }}
+                placeholder="add task"
+              />
+            </IonCol>
+            <IonCol>
+              <IonButton
+                onClick={() => {
+                  if (newTask.title !== "") {
+                    tasks.push(newTask);
+                    setTasks(JSON.parse(JSON.stringify(tasks)));
+                  }
+                }}
+              >
+                add
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         <IonList>
           {tasks.map(({ title, isCompleted }, i) => {
             return (
@@ -71,19 +80,6 @@ const All = () => {
                     toggleIsCompleted(i);
                   }}
                 />
-                <IonButton
-                  fill="clear"
-                  onClick={() => {
-                    deleteTask(i);
-                  }}
-                  color="medium"
-                >
-                  <IonIcon
-                    slot="end"
-                    icon={trashOutline}
-                    style={{ margin: "auto 0" }}
-                  />
-                </IonButton>
               </IonItem>
             );
           })}
