@@ -55,6 +55,10 @@ const Completed = () => {
     setTasks(afterDelete);
   };
 
+  const finishLine = {
+    "text-decoration": "line-through",
+  };
+
   return (
     <IonPage>
       <IonContent>
@@ -63,7 +67,7 @@ const Completed = () => {
             if (isCompleted) {
               return (
                 <IonItem key={i} lines="full">
-                  <IonLabel>{title}</IonLabel>
+                  <IonLabel style={finishLine}>{title}</IonLabel>
                   <IonCheckbox
                     slot="start"
                     value={title}
