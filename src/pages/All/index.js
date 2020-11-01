@@ -6,22 +6,26 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonButton,
   IonGrid,
   IonRow,
   IonCol,
   IonInput,
+  IonButton,
 } from "@ionic/react";
+import AddTask from "../../components/AddTask";
 
 const All = () => {
-  var [tasks, setTasks] = useState([
-    { title: "title1", isCompleted: true },
-    { title: "title2", isCompleted: false },
-    { title: "title3", isCompleted: true },
-    { title: "title4", isCompleted: false },
-    { title: "title5", isCompleted: true },
-    { title: "title6", isCompleted: false },
-  ]);
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks")));
+
+  if ("tasks" in localStorage) {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  } else {
+    const defaultTask = [{ title: "add something", isCompleted: false }];
+    setTasks((tasks) => defaultTask);
+    localStorage.setItem("tasks", JSON.stringify(defaultTask));
+  }
+
+  const [newTask, set_newTask] = useState({ title: "", isCompleted: false });
 
   const toggleIsCompleted = (i) => {
     const tmp = JSON.parse(JSON.stringify(tasks));
@@ -33,16 +37,18 @@ const All = () => {
     // });
   };
 
-  const newTask = { title: "", isCompleted: false };
   return (
     <IonPage>
       <IonContent>
+        {/* <AddTask /> */}
         <IonGrid>
           <IonRow>
             <IonCol>
               <IonInput
+                type="text"
+                value={newTask.title}
                 onIonChange={(e) => {
-                  newTask.title = e.detail.value;
+                  set_newTask({ ...newTask, title: e.target.value });
                 }}
                 placeholder="add task"
               />
@@ -50,10 +56,7 @@ const All = () => {
             <IonCol>
               <IonButton
                 onClick={() => {
-                  if (newTask.title !== "") {
-                    tasks.push(newTask);
-                    setTasks(JSON.parse(JSON.stringify(tasks)));
-                  }
+                  setTasks((tasks) => [...tasks, newTask]);
                 }}
               >
                 add
@@ -62,27 +65,30 @@ const All = () => {
           </IonRow>
         </IonGrid>
         <IonList>
-          {tasks.map(({ title, isCompleted }, i) => {
-            return (
-              <IonItem key={i} lines="full">
-                {isCompleted ? (
-                  <IonLabel style={{ textDecorationLine: "line-through" }}>
-                    {title}
-                  </IonLabel>
-                ) : (
-                  <IonLabel>{title}</IonLabel>
-                )}
-                <IonCheckbox
-                  slot="start"
-                  value={title}
-                  checked={isCompleted}
-                  onIonChange={() => {
-                    toggleIsCompleted(i);
-                  }}
-                />
-              </IonItem>
-            );
-          })}
+          {JSON.parse(localStorage.getItem("tasks")).map(
+            ({ title, isCompleted }, i) => {
+              // {tasks.map(({ title, isCompleted }, i) => {
+              return (
+                <IonItem key={i} lines="full">
+                  {isCompleted ? (
+                    <IonLabel style={{ textDecorationLine: "line-through" }}>
+                      {title}
+                    </IonLabel>
+                  ) : (
+                    <IonLabel>{title}</IonLabel>
+                  )}
+                  <IonCheckbox
+                    slot="start"
+                    value={title}
+                    checked={isCompleted}
+                    onIonChange={() => {
+                      toggleIsCompleted(i);
+                    }}
+                  />
+                </IonItem>
+              );
+            }
+          )}
         </IonList>
       </IonContent>
     </IonPage>
