@@ -20,7 +20,7 @@ const All = () => {
   if ("tasks" in localStorage) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   } else {
-    const defaultTask = [{ title: "add something", isCompleted: false }];
+    const defaultTask = [];
     setTasks((tasks) => defaultTask);
     localStorage.setItem("tasks", JSON.stringify(defaultTask));
   }
