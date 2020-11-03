@@ -15,40 +15,45 @@ import {
 import AddTask from "../../components/AddTask";
 
 const All = () => {
-  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks")));
+  const [tasks, setTasks] = useState([]);
+  // const [newTask, setNewTask] = useState({ title: "", isCompleted: false });
 
-  if ("tasks" in localStorage) {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  } else {
-    const defaultTask = [];
-    setTasks((tasks) => defaultTask);
-    localStorage.setItem("tasks", JSON.stringify(defaultTask));
-  }
+  useEffect(() => {
+    if ("tasks" in localStorage) {
+      setTasks(JSON.parse(localStorage.getItem("tasks")));
+    }
+  }, []);
 
-  const [newTask, set_newTask] = useState({ title: "", isCompleted: false });
+  const addNewTask = (newTask) => {
+    setTasks((prevState) => {
+      localStorage.setItem("tasks", JSON.stringify([...prevState, newTask]));
+      return [...prevState, newTask];
+    });
+  };
 
   const toggleIsCompleted = (i) => {
-    const tmp = JSON.parse(JSON.stringify(tasks));
-    tmp[i].isCompleted = !tmp[i].isCompleted;
-    setTasks(tmp);
-    // setTasks((prevState) => {
-    //   prevState[i].isCompleted = !prevState[i].isCompleted;
-    //   return [...prevState];
-    // });
+    // const tmp = JSON.parse(JSON.stringify(tasks));
+    // tmp[i].isCompleted = !tmp[i].isCompleted;
+    // setTasks(tmp);
+    setTasks((prevState) => {
+      prevState[i].isCompleted = !prevState[i].isCompleted;
+      localStorage.setItem("tasks", JSON.stringify([...prevState]));
+      return [...prevState];
+    });
   };
 
   return (
     <IonPage>
       <IonContent>
-        {/* <AddTask /> */}
-        <IonGrid>
+        <AddTask addNewTask={addNewTask} />
+        {/* <IonGrid>
           <IonRow>
             <IonCol>
               <IonInput
                 type="text"
                 value={newTask.title}
                 onIonChange={(e) => {
-                  set_newTask({ ...newTask, title: e.target.value });
+                  setNewTask({ title: e.target.value, isCompleted: false });
                 }}
                 placeholder="add task"
               />
@@ -56,39 +61,44 @@ const All = () => {
             <IonCol>
               <IonButton
                 onClick={() => {
-                  setTasks((tasks) => [...tasks, newTask]);
+                  setTasks((prevState) => {
+                    localStorage.setItem(
+                      "tasks",
+                      JSON.stringify([...prevState, newTask])
+                    );
+                    return [...prevState, newTask];
+                  });
                 }}
               >
                 add
               </IonButton>
             </IonCol>
           </IonRow>
-        </IonGrid>
+        </IonGrid> */}
         <IonList>
-          {JSON.parse(localStorage.getItem("tasks")).map(
-            ({ title, isCompleted }, i) => {
-              // {tasks.map(({ title, isCompleted }, i) => {
-              return (
-                <IonItem key={i} lines="full">
-                  {isCompleted ? (
-                    <IonLabel style={{ textDecorationLine: "line-through" }}>
-                      {title}
-                    </IonLabel>
-                  ) : (
-                    <IonLabel>{title}</IonLabel>
-                  )}
-                  <IonCheckbox
-                    slot="start"
-                    value={title}
-                    checked={isCompleted}
-                    onIonChange={() => {
-                      toggleIsCompleted(i);
-                    }}
-                  />
-                </IonItem>
-              );
-            }
-          )}
+          {/* {JSON.parse(localStorage.getItem("tasks")).map(
+            ({ title, isCompleted }, i) => { */}
+          {tasks.map(({ title, isCompleted }, i) => {
+            return (
+              <IonItem key={i} lines="full">
+                {isCompleted ? (
+                  <IonLabel style={{ textDecorationLine: "line-through" }}>
+                    {title}
+                  </IonLabel>
+                ) : (
+                  <IonLabel>{title}</IonLabel>
+                )}
+                <IonCheckbox
+                  slot="start"
+                  value={title}
+                  checked={isCompleted}
+                  onIonChange={() => {
+                    toggleIsCompleted(i);
+                  }}
+                />
+              </IonItem>
+            );
+          })}
         </IonList>
       </IonContent>
     </IonPage>

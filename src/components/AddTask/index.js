@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { IonGrid, IonRow, IonCol, IonInput, IonButton } from "@ionic/react";
 
-const AddTask = () => {
-  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks")));
+const AddTask = ({ addNewTask }) => {
+  // const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks")));
 
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  console.log(localStorage.getItem("tasks"));
+  // if ("tasks" in localStorage) {
+  //   localStorage.setItem("tasks", JSON.stringify(tasks));
+  // } else {
+  //   const defaultTask = [];
+  //   setTasks((tasks) => defaultTask);
+  //   localStorage.setItem("tasks", JSON.stringify(defaultTask));
+  // }
 
-  const [newTask, set_newTask] = useState({ title: "", isCompleted: false });
+  const [newTask, setNewTask] = useState({ title: "", isCompleted: false });
 
   return (
     <IonGrid>
@@ -17,7 +22,7 @@ const AddTask = () => {
             type="text"
             value={newTask.title}
             onIonChange={(e) => {
-              set_newTask({ ...newTask, title: e.target.value });
+              setNewTask({ title: e.target.value, isCompleted: false });
             }}
             placeholder="add task"
           />
@@ -25,8 +30,13 @@ const AddTask = () => {
         <IonCol>
           <IonButton
             onClick={() => {
-              setTasks((tasks) => [...tasks, newTask]);
-              // localStorage.setItem("tasks", [...tasks, newTask]);
+              addNewTask(newTask);
+              // setTasks((prevState) => {
+              //   localStorage.setItem(
+              //     "tasks",
+              //     JSON.stringify([...prevState, newTask])
+              //   );
+              //   return [...prevState, newTask];
             }}
           >
             add
