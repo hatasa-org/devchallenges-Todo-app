@@ -36,9 +36,10 @@ const All = () => {
     // tmp[i].isCompleted = !tmp[i].isCompleted;
     // setTasks(tmp);
     setTasks((prevState) => {
-      prevState[i].isCompleted = !prevState[i].isCompleted;
-      localStorage.setItem("tasks", JSON.stringify([...prevState]));
-      return [...prevState];
+      const newState = [...prevState];
+      newState[i].isCompleted = !newState[i].isCompleted;
+      localStorage.setItem("tasks", JSON.stringify(newState));
+      return newState;
     });
   };
 
