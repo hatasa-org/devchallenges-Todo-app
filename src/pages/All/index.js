@@ -53,7 +53,7 @@ const All = () => {
                 )}
                 <IonCheckbox
                   slot="start"
-                  value={title}
+                  // value={true}
                   checked={isCompleted}
                   onIonChange={() => {
                     toggleIsCompleted(i);
